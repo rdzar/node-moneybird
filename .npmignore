@@ -1,0 +1,17 @@
+# Mac OS generated file
+.DS_Store
+
+# Dependency directory
+node_modules
+
+# Source directory
+src
+dist
+test
+
+# Code coverage
+.nyc_output
+coverage
+
+# NPM
+npm-debug.log

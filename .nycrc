@@ -1,0 +1,19 @@
+{
+"require": [
+  "babel-register"
+],
+"sourceMap": false,
+"instrument": false,
+"include": [
+    "src"
+  ],
+  "exclude": [
+    "index.js"
+  ],
+  "reporter": [
+    "lcov",
+    "text-summary"
+  ],
+  "all": true,
+  "cache": true
+}

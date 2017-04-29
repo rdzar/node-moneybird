@@ -1,0 +1,28 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true,
+    "es6": true
+  },
+  "rules": {
+    // allow paren-less arrow functions
+    "arrow-parens": 0,
+    // allow semi-colon
+    "semi": 0,
+    "no-extra-semi": 0,
+    "quote-props": ["error", "always"],
+    "space-before-function-paren": ["error", "always"],
+    "prefer-template": 0,
+    "comma-dangle": ["error", "never"]
+  },
+  "globals": {
+      "log": true
+  }
+}
