@@ -1,6 +1,7 @@
 # node-moneybird
 
 [![Build Status](https://travis-ci.org/renedx/node-moneybird.svg?branch=master)](https://travis-ci.org/renedx/node-moneybird)
+[![Coverage Status](https://coveralls.io/repos/github/renedx/node-moneybird/badge.svg?branch=master)](https://coveralls.io/github/renedx/node-moneybird?branch=master)
 
 A promise based API wrapper for Moneybird.com in Node
 
