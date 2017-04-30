@@ -17,6 +17,9 @@ To make these calls work you'll have to obtain a token and the administrationId.
 ## Obtain a moneybird token
 To obtain a moneybird token go to [https://moneybird.com/user/applications/new](https://moneybird.com/user/applications/new) and choose "Personal use". The next page will provide you with the token, please store the token in a secure manner.
 
+## What about the OAuth flow?
+There are plenty of packages available or you probably already use some if you're doing OAuth anyway. Currently there is no reason to rebuild something existing that doesn't really fit the main purpose: easy & fast promise based API communication. The accesstoken resulting from a proper OAuth flow can already be used with this wrapper (`TOKEN` in the example code).
+
 ## Example create contact
 ```js
 import { Client } from 'moneybird'
