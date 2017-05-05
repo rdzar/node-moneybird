@@ -94,6 +94,40 @@ test('https - make invalid post call', (t) => {
   });
 });
 
+test('https - make post call with invalid response', (t) => {
+  test.nock('https://moneybird.com', {
+    'reqheaders': {}
+  }).post('/api/v2/ID/contacts', { 'company_name': 'DualDev' }).reply(400, {
+    'error': {
+      'sepa_mandate_id': [
+        'cannot be empty'
+      ],
+      'sepa_mandate_date': [
+        'cannot be empty'
+      ]
+    }
+  });
+
+  return https.request({
+    'hostname': 'moneybird.com',
+    'port': 443,
+    'path': '/api/v2/ID/contacts',
+    'method': 'post',
+    'body': { 'company_name': 'DualDev' }
+  }).catch(err => {
+    t.equal(err.message, 'invalid body', 'should return error nicely per spec');
+    t.equal(err.fields, {
+      'sepa_mandate_id': [
+        'cannot be empty'
+      ],
+      'sepa_mandate_date': [
+        'cannot be empty'
+      ]
+    });
+    t.end();
+  });
+});
+
 test('https - make invalid post call without return error', (t) => {
   test.nock('https://moneybird.com', {
     'reqheaders': {}
