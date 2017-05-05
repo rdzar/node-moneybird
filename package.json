@@ -1,14 +1,14 @@
 {
   "name": "moneybird",
   "description": "Node API promise-wrapper for Moneybird",
-  "version": "v1.0.1",
+  "version": "v1.0.2",
   "main": "dist",
   "scripts": {
-    "build": "babel src -s -D -d dist",
+    "build": "NODE_ENV=production babel src -s -D -d dist",
     "start": "babel-node src/index.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint src/.",
-    "prepublishOnly": "NODE_ENV=production npm run build",
+    "prepublish": "npm run build",
     "pretest": "npm run lint",
     "test": "nyc babel-tape-runner $(find test -name \\*.test.js) | tap-spec"
   },
