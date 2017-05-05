@@ -27,7 +27,14 @@ export default class customHttps {
           }
 
           if ([200, 201, 204].includes(response.statusCode) === false) {
-            if (currentBody && currentBody.error) {
+            if (currentBody && ('error' in currentBody) === true) {
+              if (Object.prototype.toString.call(currentBody.error) === '[object Object]') {
+                const fieldsError = new Error('invalid body');
+                fieldsError.fields = currentBody.error;
+                reject(fieldsError);
+                return;
+              }
+
               reject(new Error(currentBody.error));
               return;
             }

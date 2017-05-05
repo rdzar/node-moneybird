@@ -36,6 +36,23 @@ moneyBirdClient.post('contacts', {
 });
 ```
 
+## Example create contact with fields error
+```js
+import { Client } from 'moneybird'
+
+const moneyBirdClient = new Client('TOKEN', 'ADMINISTRATION_ID');
+moneyBirdClient.post('contacts', {
+  'contact': { }
+}).then(res => {
+  console.log('created!', res);
+}).catch(err => {
+  console.log('Whoops, something went wrong!', err);
+  if (err.message === 'invalid body') {
+    console.log(JSON.stringify(err.fields, 4, '  '));
+  }
+});
+```
+
 ## Example get contacts
 ```js
 import { Client } from 'moneybird'

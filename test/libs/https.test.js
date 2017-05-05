@@ -116,7 +116,7 @@ test('https - make post call with invalid response', (t) => {
     'body': { 'company_name': 'DualDev' }
   }).catch(err => {
     t.equal(err.message, 'invalid body', 'should return error nicely per spec');
-    t.equal(err.fields, {
+    t.deepEqual(err.fields, {
       'sepa_mandate_id': [
         'cannot be empty'
       ],
