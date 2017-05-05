@@ -12,17 +12,15 @@
     "es6": true
   },
   "rules": {
-    // allow paren-less arrow functions
-    "arrow-parens": 0,
-    // allow semi-colon
-    "semi": 0,
-    "no-extra-semi": 0,
+    "arrow-parens": ["error", "always"],
+    "semi": ["error", "always"],
+    "no-extra-semi": ["error"],
     "quote-props": ["error", "always"],
     "space-before-function-paren": ["error", "always"],
-    "prefer-template": 0,
-    "comma-dangle": ["error", "never"]
+    "comma-dangle": ["error", "never"],
+    "prefer-template": 0 // We disagree, template is for templating.
   },
   "globals": {
-      "log": true
+    "log": true
   }
 }

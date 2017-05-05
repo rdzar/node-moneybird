@@ -1,12 +1,8 @@
-# Mac OS generated file
-.DS_Store
-
 # Dependency directory
 node_modules
 
 # Source directory
 src
-dist
 test
 
 # Code coverage
@@ -15,3 +11,11 @@ coverage
 
 # NPM
 npm-debug.log
+
+# DOT files
+.nycrc
+.babelrc
+.eslintrc
+.gitignore
+.statuschecks
+.travis.yml

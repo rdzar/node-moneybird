@@ -1,4 +1,4 @@
-import https from '../libs/https'
+import https from '../libs/https';
 
 export default class Client {
   constructor (token, administrationId, version = 'v2') {
