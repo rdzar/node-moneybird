@@ -1,7 +1,7 @@
 import Client from './client';
 import https from './libs/https';
 
-export {
+export default {
   Client,
   https
 };
