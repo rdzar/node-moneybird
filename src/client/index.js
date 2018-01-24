@@ -32,7 +32,7 @@ export default class Client {
   request (...args) {
     const method = String(args[0]).toUpperCase();
     const path = '/api/' + this.version + '/' + this.administrationId + Client.requestEndpoint(method, args) + '.' + this.format + Client.requestQueryString(method, args);
-    console.log(path);
+
     return https.request({
       'hostname': this.hostname,
       'headers': {
@@ -50,11 +50,11 @@ export default class Client {
   }
 
   // Checks wether the request contains a query object
-  static requestHasQuery(method, args) {
+  static requestHasQuery (method, args) {
     if (args.length <= 2) { return false; }
     const objectCount = args.reduce((prev, cur) => {
-        return cur instanceof Object ? prev + 1 : prev;
-    }, 0);
+      return cur !== Object(cur) ? prev + 1 : prev;
+    });
 
     if (Client.requestHasBody(method) && objectCount >= 2) {
       return true;
@@ -66,7 +66,7 @@ export default class Client {
   }
 
   // Checks wether the request contains a body object
-  static requestBody(method, args) {
+  static requestBody (method, args) {
     if (Client.requestHasBody(method)) {
       return Client.requestHasQuery(method, args) ? args[args.length - 2] : args[args.length - 1];
     }
@@ -74,45 +74,45 @@ export default class Client {
   }
 
   // Returns the query string when the request contains a query object, else an empty string
-  static requestQueryString(method, args) {
+  static requestQueryString (method, args) {
     if (!Client.requestHasQuery(method, args)) {
       return '';
     }
 
-    let queryParams = args[args.length - 1];
-    if (!queryParams instanceof Object) {
+    const queryParams = args[args.length - 1];
+    if (queryParams !== Object(queryParams)) {
       return '';
     }
 
     let queryString = '';
-    for (let queryParamKey in queryParams) {
-      let queryParamValue = queryParams[queryParamKey];
-      queryString = queryString + (queryString == '' ? '?' : '&');
-      queryString = queryString + encodeURIComponent(queryParamKey) + '=' + encodeURIComponent(queryParamValue);
-    }
+    Object.keys(queryParams).forEach((queryParamKey) => {
+      const queryParamValue = queryParams[queryParamKey];
+      queryString += queryString === '' ? '?' : '&';
+      queryString += encodeURIComponent(queryParamKey) + '=' + encodeURIComponent(queryParamValue);
+    });
 
     return queryString;
   }
 
-  // Returns the requested endpoint, joins all the parts together and makes sure the slashes match up
-  static requestEndpoint(method, args) {
+  // Returns the requested endpoint, joins all the parts together
+  static requestEndpoint (method, args) {
     let endIndex = args.length;
 
     if (Client.requestHasBody(method, args)) {
-      endIndex--;
+      endIndex -= 1;
     }
 
     if (Client.requestHasQuery(method, args)) {
-      endIndex--;
+      endIndex -= 1;
     }
 
-    let parts = args.slice(1, endIndex).filter((item) => {
+    const parts = args.slice(1, endIndex).filter((item) => {
       return item !== Object(item);
     });
 
     if (parts.length > 1) {
       return '/' + parts.join('/');
-    } else if (parts.length == 1) {
+    } else if (parts.length === 1) {
       return '/' + parts[0];
     }
 
