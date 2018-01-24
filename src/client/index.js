@@ -52,8 +52,11 @@ export default class Client {
   // Checks wether the request contains a query object
   static requestHasQuery (method, args) {
     if (args.length <= 2) { return false; }
-    const objectCount = args.reduce((prev, cur) => {
-      return cur !== Object(cur) ? prev + 1 : prev;
+    let objectCount = 0;
+    Object.values(args).forEach((arg) => {
+      if (arg === Object(arg)) {
+        objectCount += 1;
+      }
     });
 
     if (Client.requestHasBody(method) && objectCount >= 2) {
@@ -106,9 +109,7 @@ export default class Client {
       endIndex -= 1;
     }
 
-    const parts = args.slice(1, endIndex).filter((item) => {
-      return item !== Object(item);
-    });
+    const parts = args.slice(1, endIndex).filter((item) => item !== Object(item));
 
     if (parts.length > 1) {
       return '/' + parts.join('/');
