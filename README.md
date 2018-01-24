@@ -65,6 +65,20 @@ moneyBirdClient.get('contacts').then(res => {
 });
 ```
 
+## Example get contacts with additional query
+```js
+import { Client } from 'moneybird'
+
+const moneyBirdClient = new Client('TOKEN', 'ADMINISTRATION_ID');
+moneyBirdClient.get('contacts', {}, {
+  'query': 'company_name'
+}).then(res => {
+  console.log('all contacts', res);
+}).catch(err => {
+  console.log('Whoops, something went wrong!', err);
+});
+```
+
 ## How do I make other calls?
 This promise based API wrapper is not call-specific, allowing it to be more flexible to future API changes. The following methods are available for use.
 
