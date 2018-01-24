@@ -215,3 +215,199 @@ test('client - requestHasBody - DELETE', (t) => {
   t.equal(Client.requestHasBody('DELETE'), false);
   t.end();
 });
+
+let testArgsQueryAndBody = [
+  'GET',
+  'contacts',
+  'id',
+  {
+    'contact': {
+      'name': ''
+    }
+  }, {
+    'period': 'prev_year'
+  }
+];
+
+/*
+  With query and postbody
+*/
+test('client - requestHasQuery - query and body - GET', (t) => {
+  t.equal(Client.requestHasQuery('GET', testArgsQueryAndBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - query and body - POST', (t) => {
+  t.equal(Client.requestHasQuery('POST', testArgsQueryAndBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - query and body - PUT', (t) => {
+  t.equal(Client.requestHasQuery('PUT', testArgsQueryAndBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - query and body - PATCH', (t) => {
+  t.equal(Client.requestHasQuery('PATCH', testArgsQueryAndBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - query and body - DELETE', (t) => {
+  t.equal(Client.requestHasQuery('DELETE', testArgsQueryAndBody), true);
+  t.end();
+});
+
+/*
+  With body without query
+*/
+let testArgsBody = [
+  'POST',
+  'contacts',
+  'id',
+  '12',
+  '52',
+  {
+    'contact': {
+      'name': ''
+    }
+  }
+];
+test('client - requestHasQuery - only body - GET', (t) => {
+  t.equal(Client.requestHasQuery('GET', testArgsBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - only body - POST', (t) => {
+  t.equal(Client.requestHasQuery('POST', testArgsBody), false);
+  t.end();
+});
+
+test('client - requestHasQuery - only body - PUT', (t) => {
+  t.equal(Client.requestHasQuery('PUT', testArgsBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - only body - PATCH', (t) => {
+  t.equal(Client.requestHasQuery('PATCH', testArgsBody), false);
+  t.end();
+});
+
+test('client - requestHasQuery - only body - DELETE', (t) => {
+  t.equal(Client.requestHasQuery('DELETE', testArgsBody), true);
+  t.end();
+});
+
+/*
+  With only query
+*/
+let testArgsQuery = [
+  'GET',
+  'contacts',
+  'id',
+  {
+    'query': 'name'
+  }
+];
+test('client - requestHasQuery - only query - GET', (t) => {
+  t.equal(Client.requestHasQuery('GET', testArgsQuery), true);
+  t.end();
+});
+
+test('client - requestHasQuery - only query - POST', (t) => {
+  t.equal(Client.requestHasQuery('POST', testArgsQuery), false);
+  t.end();
+});
+
+test('client - requestHasQuery - only query - PUT', (t) => {
+  t.equal(Client.requestHasQuery('PUT', testArgsQuery), true);
+  t.end();
+});
+
+test('client - requestHasQuery - only query - PATCH', (t) => {
+  t.equal(Client.requestHasQuery('PATCH', testArgsQuery), false);
+  t.end();
+});
+
+test('client - requestHasQuery - only query - DELETE', (t) => {
+  t.equal(Client.requestHasQuery('DELETE', testArgsQuery), true);
+  t.end();
+});
+
+/*
+ Without query or body
+*/
+let testArgsNoQueryOrBody = [
+  'GET',
+  'contacts',
+  'id',
+  '12'
+];
+test('client - requestHasQuery - no query or body - GET', (t) => {
+  t.equal(Client.requestHasQuery('GET', testArgsNoQueryOrBody), false);
+  t.end();
+});
+
+test('client - requestHasQuery - no query or body - PUT', (t) => {
+  t.equal(Client.requestHasQuery('PUT', testArgsNoQueryOrBody), false);
+  t.end();
+});
+
+test('client - requestHasQuery - no query or body - DELETE', (t) => {
+  t.equal(Client.requestHasQuery('DELETE', testArgsNoQueryOrBody), false);
+  t.end();
+});
+
+/*
+  Test composing the endpoint
+*/
+let testArgsEndpointNoBody = [
+  'GET',
+  'contacts',
+  12,
+  'view',
+  'something'
+];
+
+test('client - requestEndpoint - GET', (t) => {
+  t.equal(Client.requestEndpoint('GET', testArgsEndpointNoBody), '/contacts/12/view/something');
+  t.end();
+});
+
+let testArgsEndpointBody = [
+  'POST',
+  'contacts',
+  12,
+  'view',
+  'something',
+  {
+    'something': {
+      'yes': true
+    }
+  }
+];
+
+test('client - requestEndpoint - POST', (t) => {
+  t.equal(Client.requestEndpoint('POST', testArgsEndpointBody), '/contacts/12/view/something');
+  t.end();
+});
+
+let testArgsEndpointBodyAndQuery = [
+  'POST',
+  'contacts',
+  12,
+  'view',
+  'something',
+  {
+    'something': {
+      'yes': true
+    }
+  },
+  {
+    'period': 'prev_year'
+  }
+];
+
+test('client - requestEndpoint - POST', (t) => {
+  t.equal(Client.requestEndpoint('POST', testArgsEndpointBodyAndQuery), '/contacts/12/view/something');
+  t.end();
+});
