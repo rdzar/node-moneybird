@@ -90,6 +90,18 @@ test('new client - delete', (t) => {
   });
 });
 
+test('new client - POST body and query - check body', (t) => {
+  requestStub.reset();
+  return moneyBirdClientV2.post('resource_path', { 'body': true }, { 'filter': 'period' }).then(() => {
+    t.equal(moneyBirdClientV2.request.callCount, 1, 'should be called one time');
+    t.equal(moneyBirdClientV2.request.getCall(0).args[0], 'post', 'first argument should be post');
+    t.equal(moneyBirdClientV2.request.getCall(0).args[1], 'resource_path', 'second argument should be resource path');
+    t.deepEqual(moneyBirdClientV2.request.getCall(0).args[2], { 'body': true }, 'third argument should be body');
+    t.deepEqual(moneyBirdClientV2.request.getCall(0).args[3], { 'filter': 'period' }, 'fourth argument should be query object');
+    t.end();
+  });
+});
+
 test('new client - request restore', (t) => {
   requestStub.restore();
   t.end();
@@ -187,6 +199,23 @@ test('new client - request - body on patch', (t) => {
   httpsrequest.reset();
   return moneyBirdClientV2.request('patch', 'resource_path', { 'body': true }).then(() => {
     t.deepEqual(httpsrequest.getCall(0).args[0].body, { 'body' : true });
+    t.end();
+  });
+});
+
+test('new client - request - body on post with query', (t) => {
+  httpsrequest.reset();
+  return moneyBirdClientV2.request('post', 'resource_path', { 'body': true }, { 'period': 'prev_year', 'query': 'name' }).then(() => {
+    t.deepEqual(httpsrequest.getCall(0).args[0].body, { 'body' : true });
+    t.equal(httpsrequest.getCall(0).args[0].path.indexOf('?period=prev_year&query=name') != -1, true);
+    t.end();
+  });
+});
+
+test('new client - request - get with query', (t) => {
+  httpsrequest.reset();
+  return moneyBirdClientV2.request('get', 'resource_path', { 'period': 'prev_year', 'query': 'name' }).then(() => {
+    t.equal(httpsrequest.getCall(0).args[0].path.indexOf('?period=prev_year&query=name') != -1, true);
     t.end();
   });
 });
