@@ -90,6 +90,18 @@ test('new client - delete', (t) => {
   });
 });
 
+test('new client - POST body and query - check body', (t) => {
+  requestStub.reset();
+  return moneyBirdClientV2.post('resource_path', { 'body': true }, { 'filter': 'period' }).then(() => {
+    t.equal(moneyBirdClientV2.request.callCount, 1, 'should be called one time');
+    t.equal(moneyBirdClientV2.request.getCall(0).args[0], 'post', 'first argument should be post');
+    t.equal(moneyBirdClientV2.request.getCall(0).args[1], 'resource_path', 'second argument should be resource path');
+    t.deepEqual(moneyBirdClientV2.request.getCall(0).args[2], { 'body': true }, 'third argument should be body');
+    t.deepEqual(moneyBirdClientV2.request.getCall(0).args[3], { 'filter': 'period' }, 'fourth argument should be query object');
+    t.end();
+  });
+});
+
 test('new client - request restore', (t) => {
   requestStub.restore();
   t.end();
@@ -191,6 +203,23 @@ test('new client - request - body on patch', (t) => {
   });
 });
 
+test('new client - request - body on post with query', (t) => {
+  httpsrequest.reset();
+  return moneyBirdClientV2.request('post', 'resource_path', { 'body': true }, { 'period': 'prev_year', 'query': 'name' }).then(() => {
+    t.deepEqual(httpsrequest.getCall(0).args[0].body, { 'body' : true });
+    t.equal(httpsrequest.getCall(0).args[0].path.indexOf('?period=prev_year&query=name') != -1, true);
+    t.end();
+  });
+});
+
+test('new client - request - get with query', (t) => {
+  httpsrequest.reset();
+  return moneyBirdClientV2.request('get', 'resource_path', { 'period': 'prev_year', 'query': 'name' }).then(() => {
+    t.equal(httpsrequest.getCall(0).args[0].path.indexOf('?period=prev_year&query=name') != -1, true);
+    t.end();
+  });
+});
+
 test('new client - https restore', (t) => {
   httpsrequest.restore();
   t.end();
@@ -213,5 +242,201 @@ test('client - requestHasBody - GET', (t) => {
 
 test('client - requestHasBody - DELETE', (t) => {
   t.equal(Client.requestHasBody('DELETE'), false);
+  t.end();
+});
+
+let testArgsQueryAndBody = [
+  'GET',
+  'contacts',
+  'id',
+  {
+    'contact': {
+      'name': ''
+    }
+  }, {
+    'period': 'prev_year'
+  }
+];
+
+/*
+  With query and postbody
+*/
+test('client - requestHasQuery - query and body - GET', (t) => {
+  t.equal(Client.requestHasQuery('GET', testArgsQueryAndBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - query and body - POST', (t) => {
+  t.equal(Client.requestHasQuery('POST', testArgsQueryAndBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - query and body - PUT', (t) => {
+  t.equal(Client.requestHasQuery('PUT', testArgsQueryAndBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - query and body - PATCH', (t) => {
+  t.equal(Client.requestHasQuery('PATCH', testArgsQueryAndBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - query and body - DELETE', (t) => {
+  t.equal(Client.requestHasQuery('DELETE', testArgsQueryAndBody), true);
+  t.end();
+});
+
+/*
+  With body without query
+*/
+let testArgsBody = [
+  'POST',
+  'contacts',
+  'id',
+  '12',
+  '52',
+  {
+    'contact': {
+      'name': ''
+    }
+  }
+];
+test('client - requestHasQuery - only body - GET', (t) => {
+  t.equal(Client.requestHasQuery('GET', testArgsBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - only body - POST', (t) => {
+  t.equal(Client.requestHasQuery('POST', testArgsBody), false);
+  t.end();
+});
+
+test('client - requestHasQuery - only body - PUT', (t) => {
+  t.equal(Client.requestHasQuery('PUT', testArgsBody), true);
+  t.end();
+});
+
+test('client - requestHasQuery - only body - PATCH', (t) => {
+  t.equal(Client.requestHasQuery('PATCH', testArgsBody), false);
+  t.end();
+});
+
+test('client - requestHasQuery - only body - DELETE', (t) => {
+  t.equal(Client.requestHasQuery('DELETE', testArgsBody), true);
+  t.end();
+});
+
+/*
+  With only query
+*/
+let testArgsQuery = [
+  'GET',
+  'contacts',
+  'id',
+  {
+    'query': 'name'
+  }
+];
+test('client - requestHasQuery - only query - GET', (t) => {
+  t.equal(Client.requestHasQuery('GET', testArgsQuery), true);
+  t.end();
+});
+
+test('client - requestHasQuery - only query - POST', (t) => {
+  t.equal(Client.requestHasQuery('POST', testArgsQuery), false);
+  t.end();
+});
+
+test('client - requestHasQuery - only query - PUT', (t) => {
+  t.equal(Client.requestHasQuery('PUT', testArgsQuery), true);
+  t.end();
+});
+
+test('client - requestHasQuery - only query - PATCH', (t) => {
+  t.equal(Client.requestHasQuery('PATCH', testArgsQuery), false);
+  t.end();
+});
+
+test('client - requestHasQuery - only query - DELETE', (t) => {
+  t.equal(Client.requestHasQuery('DELETE', testArgsQuery), true);
+  t.end();
+});
+
+/*
+ Without query or body
+*/
+let testArgsNoQueryOrBody = [
+  'GET',
+  'contacts',
+  'id',
+  '12'
+];
+test('client - requestHasQuery - no query or body - GET', (t) => {
+  t.equal(Client.requestHasQuery('GET', testArgsNoQueryOrBody), false);
+  t.end();
+});
+
+test('client - requestHasQuery - no query or body - PUT', (t) => {
+  t.equal(Client.requestHasQuery('PUT', testArgsNoQueryOrBody), false);
+  t.end();
+});
+
+test('client - requestHasQuery - no query or body - DELETE', (t) => {
+  t.equal(Client.requestHasQuery('DELETE', testArgsNoQueryOrBody), false);
+  t.end();
+});
+
+/*
+  Test composing the endpoint
+*/
+let testArgsEndpointNoBody = [
+  'GET',
+  'contacts',
+  12,
+  'view',
+  'something'
+];
+
+test('client - requestEndpoint - GET', (t) => {
+  t.equal(Client.requestEndpoint('GET', testArgsEndpointNoBody), '/contacts/12/view/something');
+  t.end();
+});
+
+let testArgsEndpointBody = [
+  'POST',
+  'contacts',
+  12,
+  'view',
+  'something',
+  {
+    'something': {
+      'yes': true
+    }
+  }
+];
+
+test('client - requestEndpoint - POST', (t) => {
+  t.equal(Client.requestEndpoint('POST', testArgsEndpointBody), '/contacts/12/view/something');
+  t.end();
+});
+
+let testArgsEndpointBodyAndQuery = [
+  'POST',
+  'contacts',
+  12,
+  'view',
+  'something',
+  {
+    'something': {
+      'yes': true
+    }
+  },
+  {
+    'period': 'prev_year'
+  }
+];
+
+test('client - requestEndpoint - POST', (t) => {
+  t.equal(Client.requestEndpoint('POST', testArgsEndpointBodyAndQuery), '/contacts/12/view/something');
   t.end();
 });
